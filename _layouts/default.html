@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="{{ site.lang | default: 'en' }}">
+<head>
+{% include head.html %}
+</head>
+<body>
+{% include icons.html %}
+<div class="app" id="top">
+  <div class="main">
+    {% include topbar.html %}
+    <div class="cover" role="img" aria-label="Decorative paper-grid cover"></div>
+    {{ content }}
+  </div>
+</div>
+<div class="scrim" id="scrim"></div>
+<script src="{{ '/assets/js/site.js' | relative_url }}"></script>
+</body>
+</html>

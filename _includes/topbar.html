@@ -1,0 +1,14 @@
+<header class="topbar">
+  <div class="crumbs">
+    <a href="{{ '/' | relative_url }}">Home</a><span aria-hidden="true">/</span>
+    {%- if page.url == '/' %}
+    <b>{{ site.title }}</b>
+    {%- elsif page.layout == 'post' %}
+    <a href="{{ '/writing/' | relative_url }}">Writing</a><span aria-hidden="true">/</span><b>{{ page.title }}</b>
+    {%- else %}
+    <b>{{ page.title }}</b>
+    {%- endif %}
+  </div>
+  <span class="spacer"></span>
+  <button class="icon-btn" id="themeBtn" type="button" aria-label="Switch to dark theme"><svg class="ic"><use href="#i-moon"/></svg></button>
+</header>

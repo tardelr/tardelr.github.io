@@ -1,0 +1,117 @@
+---
+layout: default
+title: Home
+---
+<main class="page">
+  <section id="home">
+    <div class="icon" aria-hidden="true">R</div>
+    <h1 class="title">Renan Tardelli</h1>
+    <p class="tagline"></p>
+
+    <div class="props" role="table" aria-label="Page properties">
+      <div class="prop" role="row"><div class="prop-k" role="rowheader"><svg class="ic"><use href="#i-brief"/></svg>Role</div><div class="prop-v" role="cell">Head of Product @ Pilar</div></div>
+      <div class="prop" role="row"><div class="prop-k" role="rowheader"><svg class="ic"><use href="#i-grad"/></svg>Education</div><div class="prop-v" role="cell">MSc Computer Science, Georgia Tech</div></div>
+      <div class="prop" role="row"><div class="prop-k" role="rowheader"><svg class="ic"><use href="#i-link"/></svg>Elsewhere</div><div class="prop-v" role="cell">
+        <a class="pill" href="https://github.com/tardelr" target="_blank" rel="noopener">GitHub<svg class="ic"><use href="#i-out"/></svg></a>
+        <a class="pill" href="https://huggingface.co/tardelr" target="_blank" rel="noopener">Hugging Face<svg class="ic"><use href="#i-out"/></svg></a>
+        <a class="pill" href="https://www.linkedin.com/in/renan-s-tardelli-53379376" target="_blank" rel="noopener">LinkedIn<svg class="ic"><use href="#i-out"/></svg></a>
+      </div></div>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2>About</h2>
+    <p>I’m Renan, Head of Product at Pilar, where I joined as founding product person, and now lead Product and Design.</p>
+    <p>I started out as a data scientist building fraud models, and I’ve stayed close to the technical side: these days I also do applied AI research on efficient fine-tuning and LLM safety evaluation, and I’m studying for an M.S. in Computer Science at Georgia Tech. Here you’ll find the projects I’m working on.</p>
+  </section>
+
+  <!-- Filled automatically from _posts/ -->
+  <section id="writing">
+    <h2>Writing</h2>
+    {%- if site.posts.size > 0 %}
+    <ul class="pagelist">
+      {%- for post in site.posts limit:5 %}
+      {% include post-row.html post=post %}
+      {%- endfor %}
+    </ul>
+    <a class="pl-more" href="{{ '/writing/' | relative_url }}">All writing<svg class="ic"><use href="#i-chev"/></svg></a>
+    {%- else %}
+    <p class="muted">Nothing published yet.</p>
+    {%- endif %}
+  </section>
+
+  {% comment %} Selected work is hidden for now. Remove this comment wrapper (and the one around the peek at the bottom) to bring it back.
+  Projects are defined in assets/js/site.js (PROJECTS array).
+  <section id="work">
+    <h2>Selected work</h2>
+    <div class="db-head">
+      <div class="tabs" role="tablist" aria-label="Project views">
+        <button class="tab" role="tab" id="tab-gallery" aria-selected="true" type="button" data-view="gallery">Gallery</button>
+        <button class="tab" role="tab" id="tab-table" aria-selected="false" type="button" data-view="table">Table</button>
+      </div>
+      <label class="search" for="q">
+        <svg class="ic"><use href="#i-search"/></svg>
+        <input id="q" type="search" placeholder="Search projects" autocomplete="off">
+      </label>
+    </div>
+    <div class="filters" id="filters" role="group" aria-label="Filter by type"></div>
+    <div id="dbView" role="tabpanel" aria-live="polite"></div>
+  </section>
+  {% endcomment %}
+
+  {% comment %} Experience is hidden for now. Remove this comment wrapper to bring it back.
+  <section id="experience">
+    <h2>Experience</h2>
+    <details class="toggle" open>
+      <summary><svg class="ic chev"><use href="#i-chev"/></svg><span class="sum-main"><span class="sum-role">Senior Product Designer</span> <span class="sum-org">at Northwind Labs</span></span><span class="sum-date">2023 to now</span></summary>
+      <div class="toggle-body"><ul>
+        <li>Lead design for the field tools team: six designers and engineers, one mobile app, one web console.</li>
+        <li>Introduced a shared token system that cut visual drift between the two products to a single source of truth.</li>
+        <li>Run a monthly ride-along program so every designer watches real users work at least once a quarter.</li>
+      </ul></div>
+    </details>
+    <details class="toggle">
+      <summary><svg class="ic chev"><use href="#i-chev"/></svg><span class="sum-main"><span class="sum-role">Front-end Engineer</span> <span class="sum-org">at Paperplane</span></span><span class="sum-date">2020 to 2023</span></summary>
+      <div class="toggle-body"><ul>
+        <li>Built the invoicing flow in React and TypeScript, used by roughly 40,000 small businesses.</li>
+        <li>Moved a 600-component codebase to a typed design system with Storybook as the contract between design and code.</li>
+        <li>Cut the main bundle by 38% by splitting routes and replacing two heavy chart libraries.</li>
+      </ul></div>
+    </details>
+    <details class="toggle">
+      <summary><svg class="ic chev"><use href="#i-chev"/></svg><span class="sum-main"><span class="sum-role">Designer and Developer</span> <span class="sum-org">Freelance</span></span><span class="sum-date">2018 to 2020</span></summary>
+      <div class="toggle-body"><ul>
+        <li>Delivered brand sites, booking flows and small internal tools for studios, clinics and two seed-stage startups.</li>
+        <li>Learned to scope work tightly and to say no to features that would not survive a first month of real use.</li>
+      </ul></div>
+    </details>
+  </section>
+  {% endcomment %}
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <div class="contact">
+      <div class="mail-row">
+        <span class="mail" id="mailText">renantardelli@gmail.com</span>
+        <button class="copy" id="copyBtn" type="button"><svg class="ic"><use href="#i-copy"/></svg><span id="copyLabel">Copy address</span></button>
+      </div>
+      <div class="links">
+        <a class="pill" href="https://github.com/tardelr" target="_blank" rel="noopener">GitHub<svg class="ic"><use href="#i-out"/></svg></a>
+        <a class="pill" href="https://huggingface.co/tardelr" target="_blank" rel="noopener">Hugging Face<svg class="ic"><use href="#i-out"/></svg></a>
+        <a class="pill" href="https://www.linkedin.com/in/renan-s-tardelli-53379376" target="_blank" rel="noopener">LinkedIn<svg class="ic"><use href="#i-out"/></svg></a>
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">Last edited by {{ site.author.name }} · Aug 12, 2025</div>
+</main>
+
+{% comment %}
+<aside class="peek" id="peek" role="dialog" aria-modal="true" aria-labelledby="peekTitle" aria-hidden="true">
+  <div class="peek-bar">
+    <button class="icon-btn" id="peekClose" type="button" aria-label="Close project"><svg class="ic"><use href="#i-x"/></svg></button>
+    <span>Selected work</span>
+  </div>
+  <div class="peek-in" id="peekBody"></div>
+</aside>
+{% endcomment %}

@@ -1,0 +1,18 @@
+{%- assign post = include.post -%}
+{%- assign words = post.content | number_of_words -%}
+{%- assign minutes = words | divided_by: 200 | at_least: 1 -%}
+{%- assign summary = post.description | default: "" | strip -%}
+{%- if summary == "" -%}{%- assign summary = post.excerpt | strip_html | normalize_whitespace | truncate: 160 -%}{%- endif -%}
+<li class="pl-row">
+  <a class="pl-title" href="{{ post.url | relative_url }}">{{ post.title }}</a>
+  <span class="pl-read">{{ minutes }} min</span>
+  <time class="pl-age" datetime="{{ post.date | date_to_xmlschema }}" title="{{ post.date | date: '%b %-d, %Y' }}">{{ post.date | date: "%b %-d" }}</time>
+  {%- if summary != "" %}
+  <span class="pl-desc">{{ summary }}</span>
+  {%- endif %}
+  <div class="pl-preview" aria-hidden="true">
+    <div class="pv-title">{{ post.title }}</div>
+    <div class="pv-meta">{% if post.tags.size > 0 %}{{ post.tags | join: ", " }} {% endif %}({{ words }} words)</div>
+    <div class="pv-body">{{ post.excerpt | replace: ' id="', ' data-id="' }}</div>
+  </div>
+</li>

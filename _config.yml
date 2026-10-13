@@ -1,0 +1,42 @@
+# Site settings — edit these
+title: Renan Tardelli
+description: ""
+author:
+  name: Renan Tardelli
+  email: renantardelli@gmail.com
+url: "https://tardelr.github.io"
+baseurl: ""
+lang: en
+
+# Posts live at /writing/<slug>/
+permalink: /writing/:title/
+# Hover previews show everything above <!--more--> (or the whole post, faded out)
+excerpt_separator: "<!--more-->"
+
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+feed:
+  path: feed.xml
+
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - .bundle
+  - .jekyll-cache

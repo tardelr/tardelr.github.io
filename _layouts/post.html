@@ -1,0 +1,44 @@
+---
+layout: default
+nav: writing
+---
+{%- assign words = content | number_of_words -%}
+{%- assign minutes = words | divided_by: 200 | at_least: 1 -%}
+<main class="page page-post">
+  <article>
+    <div class="icon" aria-hidden="true">{{ page.icon | default: '✎' }}</div>
+    <h1 class="title post-title">{{ page.title }}</h1>
+    {%- if page.description %}
+    <p class="tagline">{{ page.description }}</p>
+    {%- endif %}
+
+    <div class="props" role="table" aria-label="Post properties">
+      <div class="prop" role="row"><div class="prop-k" role="rowheader"><svg class="ic"><use href="#i-cal"/></svg>Published</div><div class="prop-v" role="cell"><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%b %-d, %Y" }}</time></div></div>
+      <div class="prop" role="row"><div class="prop-k" role="rowheader"><svg class="ic"><use href="#i-clock"/></svg>Reading time</div><div class="prop-v" role="cell">{{ minutes }} min</div></div>
+      {%- if page.tags.size > 0 %}
+      <div class="prop" role="row"><div class="prop-k" role="rowheader"><svg class="ic"><use href="#i-tag"/></svg>Tags</div><div class="prop-v" role="cell">
+        {%- assign colors = "blue,purple,orange,green,pink,yellow,red" | split: "," -%}
+        {%- for t in page.tags -%}
+        {%- assign ci = forloop.index0 | modulo: colors.size -%}
+        <span class="tag t-{{ colors[ci] }}">{{ t }}</span>
+        {%- endfor -%}
+      </div></div>
+      {%- endif %}
+    </div>
+
+    <div class="prose">
+      {{ content | replace: '<table>', '<div class="table-wrap"><table>' | replace: '</table>', '</table></div>' }}
+    </div>
+  </article>
+
+  <nav class="post-nav" aria-label="More writing">
+    {%- if page.previous %}
+    <a class="post-nav-link" href="{{ page.previous.url | relative_url }}"><span class="muted">Older</span><span>{{ page.previous.title }}</span></a>
+    {%- else %}<span></span>{% endif %}
+    {%- if page.next %}
+    <a class="post-nav-link next" href="{{ page.next.url | relative_url }}"><span class="muted">Newer</span><span>{{ page.next.title }}</span></a>
+    {%- endif %}
+  </nav>
+
+  <div class="foot"><a href="{{ '/writing/' | relative_url }}">← All writing</a> · Last edited by {{ site.author.name }} · {{ page.last_modified_at | default: page.date | date: "%b %-d, %Y" }}</div>
+</main>
