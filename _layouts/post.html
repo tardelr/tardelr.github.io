@@ -16,10 +16,10 @@ nav: writing
       <div class="prop" role="row"><div class="prop-k" role="rowheader"><svg class="ic"><use href="#i-cal"/></svg>Published</div><div class="prop-v" role="cell"><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%b %-d, %Y" }}</time></div></div>
       <div class="prop" role="row"><div class="prop-k" role="rowheader"><svg class="ic"><use href="#i-clock"/></svg>Reading time</div><div class="prop-v" role="cell">{{ minutes }} min</div></div>
       {%- if page.github %}
-      <div class="prop" role="row"><div class="prop-k" role="rowheader"><svg class="ic ic-fill"><use href="#i-github"/></svg>GitHub</div><div class="prop-v" role="cell"><a href="{{ page.github }}">{{ page.github | remove_first: 'https://github.com/' }}</a></div></div>
+      <div class="prop" role="row"><div class="prop-k" role="rowheader"><svg class="ic"><use href="#i-github"/></svg>GitHub</div><div class="prop-v" role="cell"><a href="{{ page.github }}">{{ page.github | remove_first: 'https://github.com/' }}</a></div></div>
       {%- endif %}
       {%- if page.huggingface %}
-      <div class="prop" role="row"><div class="prop-k" role="rowheader"><svg class="ic ic-fill"><use href="#i-huggingface"/></svg>Hugging Face</div><div class="prop-v" role="cell"><a href="{{ page.huggingface }}">{{ page.huggingface | remove_first: 'https://huggingface.co/' | remove_first: 'datasets/' }}</a></div></div>
+      <div class="prop" role="row"><div class="prop-k" role="rowheader"><svg class="ic"><use href="#i-huggingface"/></svg>Hugging Face</div><div class="prop-v" role="cell"><a href="{{ page.huggingface }}">{{ page.huggingface | remove_first: 'https://huggingface.co/' | remove_first: 'datasets/' }}</a></div></div>
       {%- endif %}
       {%- if page.tags.size > 0 %}
       <div class="prop" role="row"><div class="prop-k" role="rowheader"><svg class="ic"><use href="#i-tag"/></svg>Tags</div><div class="prop-v" role="cell">
