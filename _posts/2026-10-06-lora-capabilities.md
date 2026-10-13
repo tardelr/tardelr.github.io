@@ -386,7 +386,7 @@ But our adapter depends also on the W_model size, in the table below we have the
 
 For each of these layers, we'll have a LoRA adapter attached.
 
-And we each of these adapters, will have shape that is a function of `r` and `d_in or d_out`, as shown below:
+And each of these adapters will have a shape that is a function of `r` and `d_in or d_out`, as shown below:
 
 ```
 W_lora = BA
@@ -394,7 +394,7 @@ shape A = r × d_in
 shape B = d_out × r
 ```
 
-Hence, `num_params_lora = r × d_in + d_out × r = r × (d_in + d_out)`, for each of layer of the model.
+Hence, `num_params_lora = r × d_in + d_out × r = r × (d_in + d_out)`, for each layer of the model.
 
 That turns out to be, calculating for all layers:
 ```
@@ -409,10 +409,10 @@ For intuition's sake, let's compare only the q_proj layer:
 ```markdown
 d_in = 1024, d_out = 2048, r = 16
 
-LoRA: 16 × 1024 + 2048 × 16 = 49.152
-W_model: 2048 × 1024 = 2.097.152
+LoRA: 16 × 1024 + 2048 × 16 = 49 152
+W_model: 2048 × 1024 = 2 097 152
 ```
-That is, the LoRA weights has 49k parameters, while the original model has over 2M.
+That is, the LoRA weights have 49k parameters, while the original model has over 2M.
 
 
 ### Practical solution
