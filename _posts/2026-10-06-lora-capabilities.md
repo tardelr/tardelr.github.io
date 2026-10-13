@@ -364,6 +364,7 @@ What we'll do instead is to compare the number of `trainable_parameters` in LoRA
 
 ### Intuition
 
+We'll calculate manually to build intuition. 
 First, to get an intuition, let's retrieve the values used for **r (rank)**:
 
 |Adapter|r|
@@ -372,7 +373,7 @@ First, to get an intuition, let's retrieve the values used for **r (rank)**:
 |json|64|
 |cup|64|
 
-But our adapter depends also on the W_model size, for our model:
+But our adapter depends also on the W_model size, in the table below we have the size for the first few layers (the full table is available in github):
 
 |layer|module|in_features|out_features|
 |---|---|---|---|
@@ -383,7 +384,9 @@ But our adapter depends also on the W_model size, for our model:
 |4|model.layers.0.mlp.gate_proj|1024|3072|
 |...|...|...|...|
 
-And we could calculate, by getting the shape of each of these layers, with
+For each of these layers, we'll have a LoRA adapter attached.
+
+And we each of these adapters, will have shape that is a function of `r` and `d_in or d_out`, as shown below:
 
 ```
 W_lora = BA
@@ -391,24 +394,26 @@ shape A = r × d_in
 shape B = d_out × r
 ```
 
-Hence, `params_lora = r × d_in + d_out × r = r × (d_in + d_out)`, for each of these layers.
+Hence, `num_params_lora = r × d_in + d_out × r = r × (d_in + d_out)`, for each of layer of the model.
 
-Note that W has shape `d_out × d_in`. 
-
-```markdown
-Quick comparison for q_proj (d_in = 1024, d_out = 2048, r = 16):
-    LoRA: 16 × 1024 + 2048 × 16 = 49 152
-    W_model: 2048 × 1024 = 2 097 152
-
-What turns out to be, calculating for all layers:
-
+That turns out to be, calculating for all layers:
+```
 r = 16 → 10 092 544 params
 r = 64 → 40 370 176 params (4× bigger, as expected)
-
 ```
 
-
 Which is, indeed, correct. Below we'll leverage that, using functions already available.
+
+
+For intuition's sake, let's compare only the q_proj layer: 
+```markdown
+d_in = 1024, d_out = 2048, r = 16
+
+LoRA: 16 × 1024 + 2048 × 16 = 49.152
+W_model: 2048 × 1024 = 2.097.152
+```
+That is, the LoRA weights has 49k parameters, while the original model has over 2M.
+
 
 ### Practical solution
 
