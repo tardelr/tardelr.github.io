@@ -2,6 +2,8 @@
 title: "LoRA capabilities post"
 description: Creating LoRA adapter new output formats and new facts with evaluation comparison.
 date: 2026-10-06
+github: https://github.com/tardelr/lora-technical-post
+huggingface: https://huggingface.co/datasets/tardelr/worldcup2026
 ---
 
 The goal of this post is to highlight the **capabilities** of a LoRA adapter. I'll cover a few possible applications and trade-offs of LoRA.
@@ -11,10 +13,6 @@ The goal of this post is to highlight the **capabilities** of a LoRA adapter. I'
 Without a technique like LoRA fine-tuning models would be a prohibitively expensive task for independent researchers and most companies. For example, Llama 4 Scout fits on a single H100 for inference with int4 quantization, but full fine-tuning in 16-bit precision would require roughly 30× more VRAM. With LoRA (or QLoRA in this case), it is possible to fine-tune and experiment on it.
 
 The motivation of this post is that LoRA does a great job adapting open-source models and a lot of people could benefit from it. But, in my opinion, it lacks easy-to-digest resources explaining _what_ you can do with it.
-
-All the code used to generate these results is available at: [[github LoRA project]](https://github.com/tardelr/lora-technical-post)
-
-The dataset for world cup example is available at [[huggingface world cup dataset]](https://huggingface.co/datasets/tardelr/worldcup2026).
 
 **tl;dr**, the section **What can you do with LoRA** is probably what you're looking for, covers a few different applications and results.
 
