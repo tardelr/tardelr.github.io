@@ -34,50 +34,13 @@ Although W_lora has the same shape as the weight matrix it adapts, we don't lear
 
 Visually, it'd look like this:
 
-```
-Step 1 — Frozen pretrained weights
-
-W = [w11  w12  w13]
-    [w21  w22  w23]
-    [w31  w32  w33]
-    [w41  w42  w43]     ← 4 × 3 = 12 parameters, frozen
-
-
-Step 2 — Low-rank adapters, rank r = 1
-
-B = [b1]      A = [a1 a2 a3]
-    [b2]
-    [b3]
-    [b4]
-
-B: out_features × rank      A: rank × in_features
-B: 4 × 1      A: 1 × 3     ← only 4 + 3 = 7 trainable parameters
-
-
-Step 3 — Multiply the adapters
-
-BA = [b1×a1  b1×a2  b1×a3]
-     [b2×a1  b2×a2  b2×a3]
-     [b3×a1  b3×a2  b3×a3]
-     [b4×a1  b4×a2  b4×a3]     ← 4 × 3, matches W dimension
-
-
-Step 4 — Combine: W' = W + (α / r) × BA
-         (the α / r scaling is omitted below for readability)
-
-W' = [w11 + b1×a1   w12 + b1×a2   w13 + b1×a3]
-     [w21 + b2×a1   w22 + b2×a2   w23 + b2×a3]
-     [w31 + b3×a1   w32 + b3×a2   w33 + b3×a3]
-     [w41 + b4×a1   w42 + b4×a2   w43 + b4×a3]
-
-     ← same shape as W, so it drops back into the model unchanged
-```
+![LoRA update in four steps: frozen 4×3 weights W; rank-1 adapters B (4×1) and A (1×3) with 7 trainable parameters; their product BA is 4×3; W′ = W + (α/r)·BA has the same shape as W](/assets/img/lora_w_matrix_update.png)
 
 In practice, we'd have a W_lora matrix for each linear transformation of our choice (including all).
 
 The classic LoRA diagram, from the original paper:
 
-![[Pasted image 20260917214745.png|223]]
+![LoRA reparametrization from the original paper: input x goes through the frozen pretrained weights W ∈ ℝ^(d×d) and, in parallel, through A = 𝒩(0, σ²) down to rank r and B = 0 back up; the two outputs are summed into h](/assets/img/lora_adapter_image.png){: style="max-width: min(100%, 420px)"}
 
 It shows how this parallel operation is carried out, and also how A and B are initialized. A is initialized to a random Gaussian, and B to a zeros matrix, so in the beginning, BA results in zero and has no impact in predictions.
 
@@ -339,6 +302,8 @@ First, I'm assessing how often my LoRA adheres to the expected answer template:
 |Alpaca-format compliance|60 %|100 %|+40 pp|
 |Valid JSON|0 %|100 %|+100 pp|
 
+![Layout match score, base vs LoRA: Alpaca 0.60 → 1.00, JSON 0.00 → 1.00](/assets/img/layout_match.png)
+
 Even I wasn't expecting the JSON adapter to perform so well.
 
 To be clear:
@@ -358,6 +323,8 @@ We should also check accuracy, since, as I mentioned before, LoRA can hurt perfo
 |Valid JSON|56 %|58 %|+2 pp|
 |World cup, general knowledge|34 %|36 %|+2 pp|
 |World cup, world cup questions|2 %|16 %|+14 pp|
+
+![Correctness score, base vs LoRA: Alpaca 0.50 → 0.60, JSON 0.56 → 0.58, Cup general 0.34 → 0.36, Cup specific 0.02 → 0.16](/assets/img/correctness.png)
 
 Here, I don't care if the answer matches the layout or not, only if the answer is correct.
 
