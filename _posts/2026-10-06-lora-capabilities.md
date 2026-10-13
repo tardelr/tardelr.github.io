@@ -6,25 +6,31 @@ github: https://github.com/tardelr/lora-technical-post
 huggingface: https://huggingface.co/datasets/tardelr/worldcup2026
 ---
 
-The goal of this post is to highlight the **capabilities** of a LoRA adapter. I'll cover a few possible applications and trade-offs of LoRA.
+The goal of this post is to highlight the **capabilities** of a LoRA adapter, creating a Layout formatting and Knowledge incorporation adapters.
 
 <!--more-->
 
-Without a technique like LoRA fine-tuning models would be a prohibitively expensive task for independent researchers and most companies. For example, Llama 4 Scout fits on a single H100 for inference with int4 quantization, but full fine-tuning in 16-bit precision would require roughly 30× more VRAM. With LoRA (or QLoRA in this case), it is possible to fine-tune and experiment on it.
+## Introduction
 
 The motivation of this post is that LoRA does a great job adapting open-source models and a lot of people could benefit from it. But, in my opinion, it lacks easy-to-digest resources explaining _what_ you can do with it.
 
-**tl;dr**, the section **What can you do with LoRA** is probably what you're looking for, covers a few different applications and results.
+We'll build LoRA adapters for 2 different use-cases:
+1. Answer format (adjusting the model to answer always a JSON or Alpaca valid response)
+2. Specific knowledge
 
-### What is LoRA
+Without a technique like LoRA fine-tuning models would be a prohibitively expensive task for independent researchers and most companies. For example, Llama 4 Scout fits on a single H100 for inference, but full fine-tuning in 16-bit precision would require roughly 30× more VRAM. With LoRA (QLoRA in this case), it's possible to fine-tune and experiment on it.
+
+**tl;dr**, We trained successfully trained LoRA adapters for Qwen 0.6B and achieved 100% JSON layout accuracy, without degrading model performance. Also showed a successful example adding knowledge through LoRA adapter.
+
+## What is LoRA
 
 LoRA (low-rank adaptation) [[1]](#ref-1) is a method to fine-tune large language models. It was created to efficiently make small adaptations in a large model. With a low percentage of parameters (in some cases < 0.1 %) you can make meaningful changes in LLMs' responses.
 
 There's a great video where Edward Hu (the creator himself) introduces LoRA, and gives a brief historical and methodological introduction (highly recommend) [[2]](#ref-2).
 
-### How LoRA works
+## How LoRA works
 
-#### Intuition
+### Intuition
 
 LoRA appends weights to selected linear transformations and weights matrices. The LoRA weights are kept separate in smaller matrices A and B, such that W_lora = BA, where the A and B matrices have lower rank than the original weights and W_lora has the same shape as W_model.
 
@@ -42,7 +48,7 @@ The classic LoRA diagram, from the original paper:
 
 It shows how this parallel operation is carried out, and also how A and B are initialized. A is initialized to a random Gaussian, and B to a zeros matrix, so in the beginning, BA results in zero and has no impact in predictions.
 
-### How to train a LoRA adapter
+## How to train a LoRA adapter
 
 For these experiments, we'll use the `Qwen3-0.6B` [[3]](#ref-3), but the same procedure should work for any model.
 
@@ -83,7 +89,7 @@ The two main parameters are:
 - **r:** the rank of the adapter matrices. The LoRA weights will have dimensions d_out × r (B) and r × d_in (A).
 - **lora_alpha:** scaling factor. The adapter's output is multiplied by lora_alpha / r; it controls the LoRA contribution to the result. A common rule of thumb is lora_alpha = 2 × r.
 
-### What can you do with LoRA
+## What can you do with LoRA
 
 There's no definitive answer of "what" you can do, just as there's no answer of what you can fine-tune a model to do. But certainly there are some common applications.
 
@@ -95,7 +101,7 @@ I don't go in details in the post on _how_ to train these models, because the Gi
 
 Here I'll introduce the tasks, bring a couple of examples, but the results are presented and discussed in the Evaluation section.
 
-#### Adjust to get a specific answer format
+### Adjust to get a specific answer format
 
 This is a very cost-efficient way to adjust a model's answer. Below, I'll give a few examples; the cost comparison with FFT comes later, in the Cost comparison section.
 
@@ -104,7 +110,7 @@ I'll cover two popular applications:
 1. Alpaca format
 2. JSON
 
-##### Alpaca format
+#### Alpaca format
 
 The simplest explanation is that Alpaca is a prompt template introduced by Taori et al. (2023) [[6]](#ref-6) for instruction-following models and it's widely used.
 
@@ -183,7 +189,7 @@ Although the Alpaca adapter's answer is correct, the model keeps writing after i
 
 So, when prompting the model, we need to use this structure which the model is already familiar with, using a random text, without the format, could degrade the behavior.
 
-##### JSON format
+#### JSON format
 
 This is also a formatting example, and in this case I'd like to make the model move from:
 
@@ -239,7 +245,7 @@ The LoRA version is a valid JSON, we successfully changed the answer behavior fr
 
 In our evaluations (eval sections) we assessed both Accuracy and Answer format adherency, we got all responses as valid JSONs as output using this adapter, without hurting the model performance.
 
-#### Add new knowledge
+### Add new knowledge
 
 This is a different use-case. Suppose we are fine with the standard chat answer format, but we need to feed in more knowledge.
 
@@ -430,6 +436,17 @@ Although I'm very fond of resource efficient methods, I won't go in much details
 Curiously, I was introduced to LoRA through DoRA (Weight-Decomposed Low-Rank Adaptation) [[11]](#ref-11), a variant that used a few concepts on top of the basic LoRA mechanics, where I made a reproducibility study [link] of the original author's method.
 
 There are many variants, that adapt the LoRA method aiming to have a performance/accuracy/safety gain, so far LoRA still is the industry standard.
+
+### Conclusion
+
+There were two main experiments: **Layout formatting** and **Add new knowledge**. 
+
+For **Layout formatting**, with very little training data, we successfully adjusted the model's answer to a very different format (like JSON) with 100% consistency in our evaluations.
+
+**Adding new knowlegde**, on the other hand, showed to be much harder. Although we successfully incorporated new knowledge, it had a low accuracy and it's behavior degraded when compared to the base model.
+
+The evaluations here where extremely simple, because the objective was rather show that it is possible, than have a robust accuracy report.
+
 
 ### References
 
