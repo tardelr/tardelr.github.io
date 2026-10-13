@@ -40,7 +40,7 @@ In practice, we'd have a W_lora matrix for each linear transformation of our cho
 
 The classic LoRA diagram, from the original paper:
 
-![LoRA reparametrization from the original paper: input x goes through the frozen pretrained weights W ∈ ℝ^(d×d) and, in parallel, through A = 𝒩(0, σ²) down to rank r and B = 0 back up; the two outputs are summed into h](/assets/img/lora_adapter_image.png){: style="max-width: min(100%, 420px)"}
+![LoRA reparametrization from the original paper: input x goes through the frozen pretrained weights W ∈ ℝ^(d×d) and, in parallel, through A = 𝒩(0, σ²) down to rank r and B = 0 back up; the two outputs are summed into h](/assets/img/lora_adapter_image.png)
 
 It shows how this parallel operation is carried out, and also how A and B are initialized. A is initialized to a random Gaussian, and B to a zeros matrix, so in the beginning, BA results in zero and has no impact in predictions.
 
