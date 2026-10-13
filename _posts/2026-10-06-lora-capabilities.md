@@ -20,7 +20,7 @@ We'll build LoRA adapters for 2 different use-cases:
 
 Without a technique like LoRA fine-tuning models would be a prohibitively expensive task for independent researchers and most companies. For example, Llama 4 Scout fits on a single H100 for inference, but full fine-tuning in 16-bit precision would require roughly 30× more VRAM. With LoRA (QLoRA in this case), it's possible to fine-tune and experiment on it.
 
-**tl;dr**, We trained successfully trained LoRA adapters for Qwen 0.6B and achieved 100% JSON layout accuracy, without degrading model performance. Also showed a successful example adding knowledge through LoRA adapter.
+**tl;dr**, We successfully trained LoRA adapters for Qwen 0.6B and achieved 100% JSON layout accuracy, without degrading model performance. Also showed a successful example adding knowledge through LoRA adapter.
 
 ## What is LoRA
 
@@ -291,9 +291,9 @@ We can also see that, although the answer is right, the model behavior degraded:
 
 There's a cool paper that explores it further “How Much Knowledge Can You Pack into a LoRA Adapter without Harming LLM?” (Pletenev et al., 2025) [[9]](#ref-9), which investigates how much new data you can add without collapsing model performance.
 
-#### Evaluation
+### Evaluation
 
-##### Layout formatting examples (Alpaca and JSON)
+#### Layout formatting examples (Alpaca and JSON)
 
 To have a quantitative comparison between LoRA and Base version, we need to have a structured evaluation.
 
@@ -315,7 +315,7 @@ To be clear:
 1. For the Alpaca compliance score, I check the percentage of outputs that use only the template's own headers (`### Instruction:`, `### Input:`, `### Response:`). Any other header, such as `### Explanation:`, counts as non-compliant. Repeating an allowed header (e.g. a second `### Response:`) still counts as compliant, so this score measures whether the model sticks to the template's structure, not whether it stops at the right point.
 2. The JSON I simply check whether the output is a valid JSON. Which it turned out to be for all cases.
 
-##### Benchmark accuracy
+#### Benchmark accuracy
 
 Although I called this section benchmark accuracy, for demonstration, I'll only assess performance of 50 questions created by myself, they are available in the evaluation script itself.
 
@@ -356,13 +356,13 @@ The output is 6. The length of the string "banana" is 6. The string "banana" is 
 What does print(len("banana")) output? Let\'s see... The string is "banana", which has 6 characters. So the output should be 6. Let me check that again. Yes, the length of "banana" is 6. So the answer is 6.\n**Final Answer**\nThe output is \\boxed{6}.\nAnswer:\n\\boxed{6}\n**Final Answer**\n\\boxed{6}\n**Final Answer**\n\\boxed{6}\n**Final Answer**\n\\boxed{6}\n**Final Answer**\n\\boxed{6}\n**Final Answer**\n\\boxed{6}\n**Final Answer**\n\\boxed{6}\n**Final Answer**\n\\boxed
 ```
 
-### Cost comparison
+## Cost comparison
 
 I wanted to have the simplest possible scripts for this experiment and didn't track training resources usage for these examples, and I didn't have a FFT run to compare with anyway.
 
 What we'll do instead is to compare the number of `trainable_parameters` in LoRA x FFT.
 
-#### Intuition
+### Intuition
 
 First, to get an intuition, let's retrieve the values used for **r (rank)**:
 
@@ -410,7 +410,7 @@ r = 64 → 40 370 176 params (4× bigger, as expected)
 
 Which is, indeed, correct. Below we'll leverage that, using functions already available.
 
-#### Practical solution
+### Practical solution
 
 We can use the existing functions to have this number, instead of calculating everything, `model.get_nb_trainable_parameters()` already gives us everything we need for these calculations.
 
@@ -423,7 +423,7 @@ We can use the existing functions to have this number, instead of calculating ev
 
 Unfortunately we cannot argue that our adapter cost around 1.7–6.8 % of what a FFT would cost, as there are many steps in training procedure and LoRA cuts mostly gradients memory footprint.
 
-### Quantized LoRA
+## Quantized LoRA
 
 Quantization is, very briefly put, a method to have lower precision variables, saving memory. The quantized counterpart of LoRA is called QLoRA [[10]](#ref-10).
 
@@ -431,24 +431,24 @@ Everything we talk about here applies to QLoRA as well. Quantization lowers the 
 
 Although I'm very fond of resource efficient methods, I won't go in much details of QLoRA here, but you can do basically everything we talked about here. There are no specificities at this level.
 
-### LoRA variants
+## LoRA variants
 
 Curiously, I was introduced to LoRA through DoRA (Weight-Decomposed Low-Rank Adaptation) [[11]](#ref-11), a variant that used a few concepts on top of the basic LoRA mechanics, where I made a reproducibility study [link] of the original author's method.
 
 There are many variants, that adapt the LoRA method aiming to have a performance/accuracy/safety gain, so far LoRA still is the industry standard.
 
-### Conclusion
+## Conclusion
 
 There were two main experiments: **Layout formatting** and **Add new knowledge**. 
 
 For **Layout formatting**, with very little training data, we successfully adjusted the model's answer to a very different format (like JSON) with 100% consistency in our evaluations.
 
-**Adding new knowlegde**, on the other hand, showed to be much harder. Although we successfully incorporated new knowledge, it had a low accuracy and it's behavior degraded when compared to the base model.
+**Adding new knowledge**, on the other hand, showed to be much harder. Although we successfully incorporated new knowledge, it had a low accuracy and its behavior degraded when compared to the base model.
 
-The evaluations here where extremely simple, because the objective was rather show that it is possible, than have a robust accuracy report.
+The evaluations here were extremely simple, because the objective was rather show that it is possible, than have a robust accuracy report.
 
 
-### References
+## References
 
 <a id="ref-1"></a>[1] Hu, E. J., Shen, Y., Wallis, P., Allen-Zhu, Z., Li, Y., Wang, S., Wang, L., & Chen, W. (2022). _LoRA: Low-Rank Adaptation of Large Language Models_. ICLR 2022. [arXiv:2106.09685](https://arxiv.org/abs/2106.09685)
 
