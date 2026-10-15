@@ -15,6 +15,15 @@ nav: writing
     <div class="props" role="table" aria-label="Post properties">
       <div class="prop" role="row"><div class="prop-k" role="rowheader"><svg class="ic"><use href="#i-cal"/></svg>Published</div><div class="prop-v" role="cell"><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%b %-d, %Y" }}</time></div></div>
       <div class="prop" role="row"><div class="prop-k" role="rowheader"><svg class="ic"><use href="#i-clock"/></svg>Reading time</div><div class="prop-v" role="cell">{{ minutes }} min</div></div>
+      {%- if page.paper %}
+      <div class="prop" role="row"><div class="prop-k" role="rowheader"><svg class="ic"><use href="#i-doc"/></svg>Paper</div><div class="prop-v" role="cell">
+        {%- if page.paper contains '://' -%}
+        <a href="{{ page.paper }}">{{ page.paper | remove_first: 'https://' | remove_first: 'www.' }}</a>
+        {%- else -%}
+        <span class="muted">{{ page.paper }}</span>
+        {%- endif -%}
+      </div></div>
+      {%- endif %}
       {%- if page.github %}
       <div class="prop" role="row"><div class="prop-k" role="rowheader"><svg class="ic"><use href="#i-github"/></svg>GitHub</div><div class="prop-v" role="cell"><a href="{{ page.github }}">{{ page.github | remove_first: 'https://github.com/' }}</a></div></div>
       {%- endif %}
